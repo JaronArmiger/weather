@@ -1,10 +1,15 @@
 const path = require('path');
+const Dotenv = require('dotenv-webpack');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
-  entry: './src/index.js',
+  entry: [
+    'babel-polyfill',
+    './src/index.js',
+  ],
   output: {
-    filename: 'main.js',
     path: path.resolve(__dirname, 'dist'),
+    filename: 'bundle.js',
   },
   module: {
   	rules: [
@@ -20,7 +25,18 @@ module.exports = {
       }
   	]
   },
+  plugins: [
+    new Dotenv(),
+    new HtmlWebpackPlugin({
+      template: './src/index.html',
+      filename: 'index.html',
+    }),
+  ],
+  watch: true,
+  devtool: 'source-map',
   devServer: {
   	contentBase: path.join(__dirname, 'dist'),
-  }
+    compress: true,
+    port: 9000,
+  },
 }
